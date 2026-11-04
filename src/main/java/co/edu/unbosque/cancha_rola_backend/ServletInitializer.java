@@ -1,5 +1,12 @@
-package co.edu.unbosque;
+package co.edu.unbosque.cancha_rola_backend;
 
-public class ServletInitializer {
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+public class ServletInitializer extends SpringBootServletInitializer {
+    @Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(CanchaRolaBackendApplication.class);
+	}
 
 }
