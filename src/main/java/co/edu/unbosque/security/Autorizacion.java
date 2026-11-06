@@ -13,7 +13,6 @@ import co.edu.unbosque.exception.AccesoDenegadoException;
 @Component
 public class Autorizacion {
 
-	/** Usuario que hizo la peticion, o vacio si no hay sesion. */
 	public Optional<UsuarioAutenticado> actual() {
 		Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
 		if (autenticacion != null && autenticacion.getPrincipal() instanceof UsuarioAutenticado usuario) {
@@ -26,7 +25,6 @@ public class Autorizacion {
 		return actual().map(u -> "ADMIN".equals(u.rol())).orElse(false);
 	}
 
-	/** Solo el propio usuario o un ADMIN. */
 	public void exigirUsuarioPropio(Long idUsuario) {
 		UsuarioAutenticado usuario = actual()
 				.orElseThrow(() -> new AccesoDenegadoException("Debe iniciar sesion"));
@@ -35,7 +33,6 @@ public class Autorizacion {
 		}
 	}
 
-	/** Solo el organizador que creo el torneo o un ADMIN. */
 	public void exigirDuenoDeTorneo(Torneo torneo) {
 		UsuarioAutenticado usuario = actual()
 				.orElseThrow(() -> new AccesoDenegadoException("Debe iniciar sesion"));

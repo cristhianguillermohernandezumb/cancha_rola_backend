@@ -43,9 +43,7 @@ public class InscripcionJugadorService {
 	@Transactional
 	public InscripcionJugadorResponse inscribir(InscripcionJugadorRequest request) {
 		Jugador jugador = jugadorService.buscarEntidad(request.idJugador());
-		// El equipo debe estar inscrito en el torneo (lanza 404 si no lo esta).
 		EquTor equTor = equTorService.buscarEntidad(request.idTorneo(), request.idEquipo());
-		// Solo el organizador del torneo (o un ADMIN) puede inscribir jugadores.
 		autorizacion.exigirDuenoDeTorneo(equTor.getTorneo());
 		validarTorneoAbierto(equTor);
 		if (inscripcionRepository.existeJugadorEnTorneo(request.idJugador(), request.idTorneo())) {
@@ -54,7 +52,6 @@ public class InscripcionJugadorService {
 		validarCamisetaLibre(request.idEquipo(), request.idTorneo(), request.numeroCamiseta());
 		InscripcionJugador inscripcion = inscripcionMapper.toEntity(request);
 		InscripcionJugador guardada = inscripcionRepository.save(inscripcion);
-		// Las relaciones son de solo lectura: se asignan para que la respuesta lleve los nombres.
 		guardada.setJugador(jugador);
 		guardada.setEquTor(equTor);
 		return inscripcionMapper.toResponse(guardada);
@@ -90,7 +87,6 @@ public class InscripcionJugadorService {
 		return inscripcionMapper.toResponse(inscripcion);
 	}
 
-	/** Solo se retira a un jugador que todavia no ha sido alineado en ningun partido del torneo. */
 	@Transactional
 	public void retirar(Long idTorneo, Long idEquipo, Long idJugador) {
 		InscripcionJugador inscripcion = buscarEntidad(idTorneo, idEquipo, idJugador);
@@ -115,7 +111,6 @@ public class InscripcionJugadorService {
 		}
 	}
 
-	/** Regla UNIQUE de la base: el numero de camiseta no se repite dentro del equipo en un torneo. */
 	private void validarCamisetaLibre(Long idEquipo, Long idTorneo, Integer numero) {
 		if (inscripcionRepository.existeCamiseta(idEquipo, idTorneo, numero)) {
 			throw new ReglaNegocioException("El numero de camiseta " + numero + " ya esta en uso en este equipo");

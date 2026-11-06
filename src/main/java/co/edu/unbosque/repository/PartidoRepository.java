@@ -16,7 +16,6 @@ public interface PartidoRepository extends JpaRepository<Partido, Long> {
 
 	List<Partido> findByFechaHoraBetweenOrderByFechaHoraAsc(LocalDateTime desde, LocalDateTime hasta);
 
-	/** Para no programar dos partidos en la misma cancha a la misma hora. */
 	boolean existsByCancha_IdCanchaAndFechaHora(Long idCancha, LocalDateTime fechaHora);
 
 	boolean existsByCancha_IdCancha(Long idCancha);

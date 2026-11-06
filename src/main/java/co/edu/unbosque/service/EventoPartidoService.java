@@ -63,7 +63,6 @@ public class EventoPartidoService {
 		if (request.minuto() > MINUTO_MAXIMO) {
 			throw new ReglaNegocioException("El minuto debe estar entre 0 y " + MINUTO_MAXIMO);
 		}
-		// El jugador debe estar en la alineacion de ese equipo en ese partido (si no, 404).
 		Alineacion alineacion = alineacionService.buscarEntidad(partido, request.idEquipo(), request.idJugador());
 		validarSinExpulsion(request.idPartido(), request.idJugador());
 
@@ -88,7 +87,6 @@ public class EventoPartidoService {
 		return eventoMapper.toResponse(buscarEntidad(idEvento));
 	}
 
-	/** Sirve para corregir un error de registro; solo mientras el partido sigue EN_JUEGO. */
 	@Transactional
 	public void eliminar(Long idEvento) {
 		EventoPartido evento = buscarEntidad(idEvento);
@@ -113,7 +111,6 @@ public class EventoPartidoService {
 		return "GOL".equals(tipo) || "AUTOGOL".equals(tipo);
 	}
 
-	/** Un jugador expulsado (ROJA) no puede tener mas eventos en el partido. */
 	private void validarSinExpulsion(Long idPartido, Long idJugador) {
 		boolean expulsado = eventoRepository.findByIdPartidoAndIdJugador(idPartido, idJugador).stream()
 				.anyMatch(e -> "ROJA".equals(e.getTipoEvento()));
@@ -122,7 +119,6 @@ public class EventoPartidoService {
 		}
 	}
 
-	/** Local = goles propios + autogoles del visitante; visitante = goles propios + autogoles del local. */
 	private void recalcularMarcador(Partido partido) {
 		Long idPartido = partido.getIdPartido();
 		Long idLocal = null;

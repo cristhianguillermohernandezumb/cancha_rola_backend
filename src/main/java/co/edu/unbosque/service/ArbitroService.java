@@ -34,7 +34,6 @@ public class ArbitroService {
 		return arbitroMapper.toResponse(arbitroRepository.save(arbitro));
 	}
 
-	/** Filtro opcional por estado: /arbitros?estado=ACTIVO */
 	@Transactional(readOnly = true)
 	public List<ArbitroResponse> listar(String estado) {
 		List<Arbitro> arbitros = (estado == null || estado.isBlank()) ? arbitroRepository.findAll()
@@ -70,7 +69,6 @@ public class ArbitroService {
 		return arbitroMapper.toResponse(arbitroRepository.save(arbitro));
 	}
 
-	/** Un arbitro no se borra (puede tener partidos asignados): se pasa a INACTIVO. */
 	@Transactional
 	public ArbitroResponse cambiarEstado(Long idArbitro, String nuevoEstado) {
 		String estado = nuevoEstado == null ? "" : nuevoEstado.toUpperCase();
@@ -82,21 +80,18 @@ public class ArbitroService {
 		return arbitroMapper.toResponse(arbitroRepository.save(arbitro));
 	}
 
-	/** Lo usan otros servicios (partidos) para obtener la entidad completa. */
 	@Transactional(readOnly = true)
 	public Arbitro buscarEntidad(Long idArbitro) {
 		return arbitroRepository.findById(idArbitro)
 				.orElseThrow(() -> new NoEncontradoException("No existe el arbitro con id " + idArbitro));
 	}
 
-	/** Regla UNIQUE de la base: (tipo de documento, documento). */
 	private void validarDocumentoLibre(String tipoDocumento, String documento) {
 		if (arbitroRepository.existsByTipoDocumentoAndDocumento(tipoDocumento, documento)) {
 			throw new ReglaNegocioException("Ya existe un arbitro con documento " + tipoDocumento + " " + documento);
 		}
 	}
 
-	/** Regla agregada en el servicio (la base no la exige): la licencia identifica a un solo arbitro. */
 	private void validarLicenciaLibre(Integer numeroLicencia) {
 		if (arbitroRepository.existsByNumeroLicencia(numeroLicencia)) {
 			throw new ReglaNegocioException("Ya existe un arbitro con la licencia " + numeroLicencia);

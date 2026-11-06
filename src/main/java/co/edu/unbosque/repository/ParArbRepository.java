@@ -20,7 +20,6 @@ public interface ParArbRepository extends JpaRepository<ParArb, ParArbId> {
 	boolean existeRolEnPartido(@Param("idPartido") Long idPartido, @Param("rol") String rol);
 
 
-	/** Un arbitro no puede pitar dos partidos a la misma hora. */
 	@Query("select count(p) > 0 from ParArb p where p.id.idArbitro = :idArbitro and p.id.idPartido <> :idPartido and p.partido.fechaHora = :fechaHora")
 	boolean existeArbitroEnFecha(@Param("idArbitro") Long idArbitro, @Param("idPartido") Long idPartido,
 			@Param("fechaHora") java.time.LocalDateTime fechaHora);

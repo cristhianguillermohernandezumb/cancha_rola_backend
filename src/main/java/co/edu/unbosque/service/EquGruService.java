@@ -44,9 +44,7 @@ public class EquGruService {
 		if ("FINALIZADO".equals(grupo.getTorneo().getEstado())) {
 			throw new ReglaNegocioException("El torneo ya finalizo; no se pueden modificar sus grupos");
 		}
-		// El equipo debe estar inscrito en el torneo del grupo (lanza 404 si no lo esta).
 		EquTor inscripcion = equTorService.buscarEntidad(idTorneo, idEquipo);
-		// Un equipo solo puede estar en un grupo por fase dentro del torneo.
 		boolean yaEnLaFase = equGruRepository.buscarPorTorneo(idTorneo).stream()
 				.anyMatch(eg -> eg.getId().getIdEquipo().equals(idEquipo) && eg.getGrupo() != null
 						&& eg.getGrupo().getFase().equals(grupo.getFase()));
@@ -56,7 +54,6 @@ public class EquGruService {
 		EquGru asignacion = new EquGru();
 		asignacion.setId(new EquGruId(idGrupo, idTorneo, idEquipo));
 		EquGru guardada = equGruRepository.save(asignacion);
-		// Las relaciones son de solo lectura: se asignan para que la respuesta lleve los nombres.
 		guardada.setGrupo(grupo);
 		guardada.setEquTor(inscripcion);
 		return equGruMapper.toResponse(guardada);

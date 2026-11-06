@@ -7,7 +7,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import co.edu.unbosque.event.UsuarioRegistradoEvent;
 
-/** Reacciona al registro de un usuario: espera a que se guarde (commit) y manda el correo en segundo plano. */
 @Component
 public class RegistroListener {
 

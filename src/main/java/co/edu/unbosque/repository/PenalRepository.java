@@ -13,7 +13,6 @@ public interface PenalRepository extends JpaRepository<Penal, Long> {
 
 	List<Penal> findByIdPartidoOrderByOrdenAsc(Long idPartido);
 
-	/** Los tiros de varios partidos a la vez (para el resumen publico de un torneo). */
 	@Query("select p from Penal p where p.idPartido in :ids order by p.idPartido, p.orden")
 	List<Penal> buscarDePartidos(@Param("ids") Collection<Long> ids);
 

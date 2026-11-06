@@ -26,10 +26,8 @@ public class TorneoService {
 	private static final String INSCRIPCION = "INSCRIPCION";
 	private static final String EN_CURSO = "EN_CURSO";
 	private static final String FINALIZADO = "FINALIZADO";
-	/** Orden en que avanza un torneo: no se puede retroceder ni saltar etapas. */
 	private static final List<String> ETAPAS = List.of(INSCRIPCION, EN_CURSO, FINALIZADO);
 	private static final int MIN_EQUIPOS_PARA_INICIAR = 2;
-	/** Tamanos de torneo disponibles: 24 equipos (6 grupos de 4, eliminatoria desde octavos) o 48 (12 grupos, desde 32avos). */
 	private static final List<Integer> TAMANOS_PERMITIDOS = List.of(24, 48);
 
 	private final TorneoRepository torneoRepository;
@@ -113,7 +111,6 @@ public class TorneoService {
 		return torneoMapper.toResponse(torneoRepository.save(torneo));
 	}
 
-	/** Avanza el torneo a la siguiente etapa: INSCRIPCION -> EN_CURSO -> FINALIZADO. */
 	@Transactional
 	public TorneoResponse cambiarEstado(Long idTorneo, String nuevoEstado) {
 		Torneo torneo = buscarEntidad(idTorneo);
@@ -137,12 +134,10 @@ public class TorneoService {
 		}
 		torneo.setEstado(destino);
 		Torneo guardado = torneoRepository.save(torneo);
-		// Al iniciar o terminar, los seguidores con notificaciones activas reciben un correo (despues del commit).
 		eventos.publishEvent(new TorneoCambioEstadoEvent(idTorneo, destino));
 		return torneoMapper.toResponse(guardado);
 	}
 
-	/** Lo usan otros servicios (equipos, grupos, partidos...) para obtener la entidad completa. */
 	@Transactional(readOnly = true)
 	public Torneo buscarEntidad(Long idTorneo) {
 		return torneoRepository.findById(idTorneo)

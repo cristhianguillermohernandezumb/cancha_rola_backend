@@ -54,7 +54,6 @@ public class EstadisticaService {
 		this.equipoService = equipoService;
 	}
 
-	/** Tabla del torneo; con idGrupo solo cuenta los equipos de ese grupo y los partidos entre ellos. */
 	@Transactional(readOnly = true)
 	public List<PosicionResponse> tablaDePosiciones(Long idTorneo, Long idGrupo) {
 		torneoService.buscarEntidad(idTorneo);
@@ -67,7 +66,6 @@ public class EstadisticaService {
 			idsGrupo = equGruRepository.buscarPorGrupo(idGrupo).stream().map(e -> e.getId().getIdEquipo())
 					.collect(Collectors.toSet());
 		}
-		// Todos los equipos inscritos aparecen, incluso los que aun no han jugado.
 		Map<Long, String> equipos = new LinkedHashMap<>();
 		for (EquTor et : equTorRepository.buscarPorTorneo(idTorneo)) {
 			Long idEquipo = et.getId().getIdEquipo();
@@ -78,13 +76,11 @@ public class EstadisticaService {
 		return calcularTabla(equipos, resultados(idTorneo));
 	}
 
-	/** Maximos goleadores del torneo. limite = cuantos jugadores devolver (por defecto 10). */
 	@Transactional(readOnly = true)
 	public List<GoleadorResponse> goleadores(Long idTorneo, int limite) {
 		return goleadores(idTorneo, limite, "todas");
 	}
 
-	/** fase: "grupos" (solo fase de grupos), "eliminatoria" (despues de grupos) o "todas" (todo el torneo). */
 	@Transactional(readOnly = true)
 	public List<GoleadorResponse> goleadores(Long idTorneo, int limite, String fase) {
 		torneoService.buscarEntidad(idTorneo);
@@ -119,7 +115,6 @@ public class EstadisticaService {
 		return resultado;
 	}
 
-	/** Un partido terminado: quien fue local, quien visitante y el marcador. */
 	record Resultado(Long idLocal, Long idVisitante, int golesLocal, int golesVisitante) {
 	}
 
@@ -139,10 +134,7 @@ public class EstadisticaService {
 		return lista;
 	}
 
-	/**
-	 * Calculo puro de la tabla (sin base de datos). Orden: puntos, diferencia de goles, goles a favor y nombre.
-	 * Un resultado solo cuenta si sus dos equipos estan en el mapa de equipos.
-	 */
+	
 	static List<PosicionResponse> calcularTabla(Map<Long, String> equipos, List<Resultado> resultados) {
 		Map<Long, int[]> datos = new HashMap<>();
 		// [partidos, ganados, empatados, perdidos, golesFavor, golesContra]
