@@ -38,7 +38,6 @@ public class EquipoController {
 		return equipoService.crear(request);
 	}
 
-	/** Lista todos los equipos. Opcional: /equipos?nombre=tigres */
 	@GetMapping
 	public List<EquipoResponse> listar(@RequestParam(required = false) String nombre) {
 		return equipoService.listar(nombre);
@@ -49,7 +48,6 @@ public class EquipoController {
 		return equipoService.obtener(id);
 	}
 
-	/** Imagen del escudo para usar directamente en <img src=...>. 404 si el equipo no tiene una imagen valida. */
 	@GetMapping("/{id}/escudo")
 	public ResponseEntity<byte[]> escudo(@PathVariable Long id) {
 		byte[] datos = equipoService.obtenerEscudo(id);
@@ -62,7 +60,6 @@ public class EquipoController {
 				.body(datos);
 	}
 
-	/** Cambia solo el escudo. El cuerpo es la imagen tal cual (Content-Type image/png, image/jpeg...). */
 	@PutMapping(value = "/{id}/escudo", consumes = MediaType.ALL_VALUE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void cambiarEscudo(@PathVariable Long id, @RequestBody byte[] escudo) {

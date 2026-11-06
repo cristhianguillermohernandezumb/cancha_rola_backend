@@ -35,7 +35,6 @@ public class CanchaController {
 		return canchaService.crear(request);
 	}
 
-	/** Lista todas. Filtros opcionales: /canchas?localidad=Suba o /canchas?tipoSuperficie=SINTETICA */
 	@GetMapping
 	public List<CanchaResponse> listar(@RequestParam(required = false) String localidad,
 			@RequestParam(required = false) String tipoSuperficie) {
