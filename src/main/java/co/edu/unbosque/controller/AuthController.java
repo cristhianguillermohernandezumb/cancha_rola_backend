@@ -34,6 +34,7 @@ public class AuthController {
 		return authService.login(request);
 	}
 
+	/** Datos del usuario dueno del token. */
 	@GetMapping("/me")
 	public UsuarioResponse me() {
 		Long id = autorizacion.actual().orElseThrow(() -> new AccesoDenegadoException("Debe iniciar sesion"))

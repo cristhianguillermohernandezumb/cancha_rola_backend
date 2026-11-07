@@ -27,6 +27,7 @@ public class PenalController {
 		return penalService.obtener(idPartido);
 	}
 
+	/** Registra el siguiente tiro: convertido=true (gol) o false (fallo). */
 	@PostMapping("/partidos/{idPartido}/penales")
 	public PenalesResponse registrar(@PathVariable Long idPartido, @RequestParam boolean convertido) {
 		return penalService.registrar(idPartido, convertido);

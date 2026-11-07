@@ -16,6 +16,7 @@ public interface EquTorRepository extends JpaRepository<EquTor, EquTorId> {
 	@Query("select e from EquTor e where e.id.idEquipo = :idEquipo")
 	List<EquTor> buscarPorEquipo(@Param("idEquipo") Long idEquipo);
 
+	/** Para validar el maximo de equipos (max_equipos) de un torneo. */
 	@Query("select count(e) from EquTor e where e.id.idTorneo = :idTorneo")
 	long contarPorTorneo(@Param("idTorneo") Long idTorneo);
 

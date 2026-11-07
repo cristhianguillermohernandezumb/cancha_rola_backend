@@ -8,7 +8,7 @@
 		<version>4.1.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>co.edu.unbosque.controller</groupId>
+	<groupId>co.edu.unbosque</groupId>
 	<artifactId>cancha_rola_backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>

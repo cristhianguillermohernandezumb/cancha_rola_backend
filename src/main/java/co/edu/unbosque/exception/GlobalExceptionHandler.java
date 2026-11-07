@@ -48,6 +48,7 @@ public class GlobalExceptionHandler {
 		return respuesta(HttpStatus.BAD_REQUEST, "El cuerpo de la solicitud no es un JSON valido", null);
 	}
 
+	/** Red de seguridad: si la base rechaza algo (UNIQUE, CHECK, llave foranea) que el servicio no detecto. */
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<Map<String, Object>> integridad(DataIntegrityViolationException ex) {
 		return respuesta(HttpStatus.CONFLICT, "La operacion viola una restriccion de la base de datos", null);

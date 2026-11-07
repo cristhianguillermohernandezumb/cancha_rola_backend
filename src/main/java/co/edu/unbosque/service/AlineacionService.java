@@ -33,6 +33,7 @@ public class AlineacionService {
 
 	private final Autorizacion autorizacion;
 
+	/** Titulares permitidos segun la modalidad del torneo. */
 	private static final Map<String, Integer> TITULARES = Map.of("FUTBOL_5", 5, "FUTBOL_7", 7, "FUTBOL_8", 8,
 			"FUTBOL_11", 11);
 
@@ -78,12 +79,17 @@ public class AlineacionService {
 		alineacion.setTitular(t);
 		alineacion.setMinutosJugados(0);
 		Alineacion guardada = alineacionRepository.save(alineacion);
+		// Las relaciones son de solo lectura: se asignan para que la respuesta lleve el nombre.
 		guardada.setParEqu(parEqu);
 		guardada.setInscripcionJugador(inscripcion);
 		return alineacionMapper.toResponse(guardada);
 	}
 
-	
+	/**
+	 * Copia la ultima alineacion que el equipo uso (su partido anterior mas reciente con alineacion) a este partido,
+	 * para armarla de un golpe. Los titulares se copian primero y respetan el cupo de la modalidad; quien no este
+	 * inscrito en este torneo o ya este en el partido se omite.
+	 */
 	@Transactional
 	public CopiaAlineacionResponse copiarAnterior(Long idPartido, Long idEquipo) {
 		Partido partido = partidoService.buscarEntidad(idPartido);
@@ -142,7 +148,10 @@ public class AlineacionService {
 				.map(alineacionMapper::toResponse).toList();
 	}
 
-	
+	/**
+	 * Cambia titular y/o minutos (los dos son opcionales). El titular solo se cambia antes de empezar; los minutos
+	 * solo existen cuando el partido esta o estuvo EN_JUEGO.
+	 */
 	@Transactional
 	public AlineacionResponse actualizar(Long idPartido, Long idEquipo, Long idJugador, String titular,
 			Integer minutos) {
@@ -185,6 +194,7 @@ public class AlineacionService {
 		alineacionRepository.deleteById(alineacion.getId());
 	}
 
+	/** Lo usan otros servicios (eventos del partido) para validar que el jugador esta en la alineacion. */
 	@Transactional(readOnly = true)
 	public Alineacion buscarEntidad(Partido partido, Long idEquipo, Long idJugador) {
 		AlineacionId id = new AlineacionId(partido.getIdPartido(), idEquipo, partido.getTorneo().getIdTorneo(),

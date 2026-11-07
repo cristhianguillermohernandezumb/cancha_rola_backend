@@ -35,6 +35,7 @@ public class EquipoService {
 		return equipoMapper.toResponse(equipoRepository.save(equipo));
 	}
 
+	/** Si se envia un nombre, filtra los equipos cuyo nombre lo contenga (sin importar mayusculas). */
 	@Transactional(readOnly = true)
 	public List<EquipoResponse> listar(String nombre) {
 		List<Equipo> equipos = (nombre == null || nombre.isBlank()) ? equipoRepository.findAll()
@@ -58,11 +59,13 @@ public class EquipoService {
 		return equipoMapper.toResponse(equipoRepository.save(equipo));
 	}
 
+	/** Bytes del escudo tal como estan guardados (puede ser el relleno de 1 byte si nunca se subio imagen). */
 	@Transactional(readOnly = true)
 	public byte[] obtenerEscudo(Long idEquipo) {
 		return buscarEntidad(idEquipo).getEscudo();
 	}
 
+	/** Reemplaza solo el escudo. Acepta PNG, JPG, GIF o WEBP de hasta 2 MB. */
 	@Transactional
 	public void actualizarEscudo(Long idEquipo, byte[] escudo) {
 		if (escudo == null || escudo.length == 0) {
@@ -79,6 +82,7 @@ public class EquipoService {
 		equipoRepository.save(equipo);
 	}
 
+	/** Reconoce el tipo de imagen por sus primeros bytes; devuelve null si no es una imagen permitida. */
 	public static String tipoDeImagen(byte[] b) {
 		if (b == null || b.length < 12) {
 			return null;
@@ -99,6 +103,7 @@ public class EquipoService {
 		return null;
 	}
 
+	/** Lo usan otros servicios (inscripciones, entrenadores...) para obtener la entidad completa. */
 	@Transactional(readOnly = true)
 	public Equipo buscarEntidad(Long idEquipo) {
 		return equipoRepository.findById(idEquipo)

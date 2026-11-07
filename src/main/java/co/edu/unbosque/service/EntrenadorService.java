@@ -39,6 +39,7 @@ public class EntrenadorService {
 		return entrenadorMapper.toResponse(entrenadorRepository.save(entrenador));
 	}
 
+	/** Filtro opcional por equipo: /entrenadores?idEquipo=1 */
 	@Transactional(readOnly = true)
 	public List<EntrenadorResponse> listar(Long idEquipo) {
 		List<Entrenador> entrenadores = idEquipo == null ? entrenadorRepository.findAll()
@@ -46,6 +47,7 @@ public class EntrenadorService {
 		return entrenadores.stream().map(entrenadorMapper::toResponse).toList();
 	}
 
+	/** Vista publica: el equipo debe estar inscrito en el torneo (si no, 404). Sin documento ni datos de contacto. */
 	@Transactional(readOnly = true)
 	public List<EntrenadorPublicoResponse> listarPublico(Long idTorneo, Long idEquipo) {
 		equTorService.buscarEntidad(idTorneo, idEquipo);
@@ -67,6 +69,7 @@ public class EntrenadorService {
 		return entrenadorMapper.toResponse(entrenador);
 	}
 
+	/** Tambien sirve para pasar un entrenador a otro equipo (cambiando idEquipo). */
 	@Transactional
 	public EntrenadorResponse actualizar(Long idEntrenador, EntrenadorRequest request) {
 		Entrenador entrenador = buscarEntidad(idEntrenador);
@@ -80,6 +83,7 @@ public class EntrenadorService {
 		return entrenadorMapper.toResponse(entrenadorRepository.save(entrenador));
 	}
 
+	/** Ninguna otra tabla depende del entrenador, asi que se puede borrar (sus correos y telefonos se van con el). */
 	@Transactional
 	public void eliminar(Long idEntrenador) {
 		buscarEntidad(idEntrenador);
@@ -92,6 +96,7 @@ public class EntrenadorService {
 				.orElseThrow(() -> new NoEncontradoException("No existe el entrenador con id " + idEntrenador));
 	}
 
+	/** Regla UNIQUE de la base: (tipo de documento, documento). */
 	private void validarDocumentoLibre(String tipoDocumento, String documento) {
 		if (entrenadorRepository.existsByTipoDocumentoAndDocumento(tipoDocumento, documento)) {
 			throw new ReglaNegocioException(

@@ -35,6 +35,7 @@ public class CanchaService {
 		return canchaMapper.toResponse(canchaRepository.save(cancha));
 	}
 
+	/** Filtros opcionales: primero localidad y, si no viene, tipo de superficie. Sin filtros lista todas. */
 	@Transactional(readOnly = true)
 	public List<CanchaResponse> listar(String localidad, String tipoSuperficie) {
 		List<Cancha> canchas;
@@ -65,6 +66,7 @@ public class CanchaService {
 		return canchaMapper.toResponse(canchaRepository.save(cancha));
 	}
 
+	/** Solo se borra una cancha que no tenga partidos programados o jugados. */
 	@Transactional
 	public void eliminar(Long idCancha) {
 		buscarEntidad(idCancha);
@@ -74,6 +76,7 @@ public class CanchaService {
 		canchaRepository.deleteById(idCancha);
 	}
 
+	/** Lo usan otros servicios (partidos) para obtener la entidad completa. */
 	@Transactional(readOnly = true)
 	public Cancha buscarEntidad(Long idCancha) {
 		return canchaRepository.findById(idCancha)

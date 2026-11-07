@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Bienvenido a Futbol Bogota</title>
+</head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;">
+	<table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
+		<tr>
+			<td align="center">
+				<table width="560" cellpadding="0" cellspacing="0"
+					style="background:#ffffff;border-radius:8px;overflow:hidden;">
+					<tr>
+						<td style="background:#15803d;color:#ffffff;padding:24px;font-size:22px;font-weight:bold;">
+							Futbol Bogota</td>
+					</tr>
+					<tr>
+						<td style="padding:24px;color:#1f2937;font-size:15px;line-height:1.6;">
+							<p style="margin-top:0;">
+								Hola <strong th:text="${nombre}">Usuario</strong>,
+							</p>
+							<p>Tu registro se completo correctamente. Ya eres parte de la comunidad de torneos de
+								futbol de Bogota.</p>
+							<p>Con tu cuenta puedes:</p>
+							<ul>
+								<li>Seguir tus torneos favoritos.</li>
+								<li>Activar las notificaciones para saber cuando un torneo inicia.</li>
+								<li>Consultar partidos, marcadores y tablas en cualquier momento.</li>
+							</ul>
+							<p>Inicia sesion con el correo con el que te registraste.</p>
+							<p style="margin-bottom:0;">Nos vemos en la cancha.</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="background:#f9fafb;color:#6b7280;padding:16px 24px;font-size:12px;">
+							Recibes este correo porque te registraste en Futbol Bogota. Si no fuiste tu, ignora este
+							mensaje.</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -72,6 +72,7 @@ public class GrupoService {
 		return grupoMapper.toResponse(grupoRepository.save(grupo));
 	}
 
+	/** Solo se borra un grupo vacio (sin equipos asignados) de un torneo que no ha finalizado. */
 	@Transactional
 	public void eliminar(Long idGrupo) {
 		Grupo grupo = buscarEntidad(idGrupo);
@@ -83,6 +84,7 @@ public class GrupoService {
 		grupoRepository.deleteById(idGrupo);
 	}
 
+	/** Lo usan otros servicios (EquGruService, partidos...) para obtener la entidad completa. */
 	@Transactional(readOnly = true)
 	public Grupo buscarEntidad(Long idGrupo) {
 		return grupoRepository.findById(idGrupo)
@@ -95,6 +97,7 @@ public class GrupoService {
 		}
 	}
 
+	/** Regla UNIQUE de la base: no puede haber dos grupos con la misma fase y letra en un torneo. */
 	private void validarUnico(Long idTorneo, Integer fase, String letra) {
 		if (grupoRepository.existsByTorneo_IdTorneoAndFaseAndLetra(idTorneo, fase, letra)) {
 			throw new ReglaNegocioException("Ya existe el grupo " + letra + " de la fase " + fase + " en este torneo");

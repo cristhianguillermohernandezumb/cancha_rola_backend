@@ -52,6 +52,7 @@ public class UsuarioService {
 		usuario.setFechaRegistro(LocalDate.now());
 		usuario.setEstado(ACTIVO);
 		Usuario guardado = usuarioRepository.save(usuario);
+		// Solo los usuarios normales (ESPECTADOR) reciben correo de bienvenida; se envia despues de guardar.
 		if ("ESPECTADOR".equals(guardado.getRol())) {
 			eventos.publishEvent(new UsuarioRegistradoEvent(guardado.getIdUsuario(), guardado.getPrimerNombre(),
 					guardado.getCorreo()));
@@ -78,12 +79,14 @@ public class UsuarioService {
 			throw new ReglaNegocioException("Ya existe un usuario con el correo " + request.correo());
 		}
 		usuarioMapper.actualizarEntidad(usuario, request);
+		// La contrasenia solo cambia si el usuario envia una nueva.
 		if (request.contrasenia() != null && !request.contrasenia().isBlank()) {
 			usuario.setContrasenia(passwordEncoder.encode(request.contrasenia()));
 		}
 		return usuarioMapper.toResponse(usuarioRepository.save(usuario));
 	}
 
+	/** Solo ADMIN (la URL lo exige). Un admin no puede cambiar su propio rol para no quedarse sin administradores. */
 	@Transactional
 	public UsuarioResponse cambiarRol(Long idUsuario, String rol) {
 		if (!ROLES.contains(rol)) {
@@ -95,6 +98,7 @@ public class UsuarioService {
 		return usuarioMapper.toResponse(usuarioRepository.save(usuario));
 	}
 
+	/** Un usuario no se borra (tiene torneos y auditoria asociados): se pasa a INACTIVO. */
 	@Transactional
 	public UsuarioResponse desactivar(Long idUsuario) {
 		exigirOtroUsuario(idUsuario, "No puede desactivar su propia cuenta");
@@ -106,6 +110,7 @@ public class UsuarioService {
 		return cambiarEstado(idUsuario, ACTIVO);
 	}
 
+	/** Lo usan otros servicios (por ejemplo TorneoService) para obtener la entidad completa. */
 	@Transactional(readOnly = true)
 	public Usuario buscarEntidad(Long idUsuario) {
 		return usuarioRepository.findById(idUsuario)

@@ -31,7 +31,10 @@ public class AuditoriaService {
 		this.auditoriaMapper = auditoriaMapper;
 	}
 
-	
+	/**
+	 * Escribe un registro de auditoria. Devuelve false (sin guardar nada) si el usuario no existe, porque la
+	 * base exige un usuario en cada registro.
+	 */
 	@Transactional
 	public boolean registrar(Long idUsuario, String entidad, String idRegistro, String accion, String detalle,
 			Long idTorneo) {
@@ -51,6 +54,7 @@ public class AuditoriaService {
 		return true;
 	}
 
+	/** Mas recientes primero. Filtros opcionales por usuario o por torneo (si vienen los dos, manda usuario). */
 	@Transactional(readOnly = true)
 	public List<AuditoriaResponse> listar(Long idUsuario, Long idTorneo) {
 		List<Auditoria> registros;

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${torneo}">Torneo</title>
+</head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;">
+	<table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 0;">
+		<tr>
+			<td align="center">
+				<table width="560" cellpadding="0" cellspacing="0"
+					style="background:#ffffff;border-radius:8px;overflow:hidden;">
+					<tr>
+						<td style="background:#15803d;color:#ffffff;padding:24px;font-size:22px;font-weight:bold;">
+							Futbol Bogota</td>
+					</tr>
+					<tr>
+						<td style="padding:24px;color:#1f2937;font-size:15px;line-height:1.6;">
+							<p style="margin-top:0;">
+								Hola <strong th:text="${nombre}">Usuario</strong>,
+							</p>
+							<p>
+								<strong th:text="${torneo}">Torneo</strong> ya termino.
+							</p>
+							<div th:if="${campeon != null}"
+								style="background:#f0fdf4;border-radius:6px;padding:16px;text-align:center;">
+								<div style="font-size:13px;color:#166534;text-transform:uppercase;letter-spacing:1px;"
+									th:text="${porFinal} ? 'Campeon' : 'Lider de la tabla'">Campeon</div>
+								<div style="font-size:26px;font-weight:bold;color:#14532d;" th:text="${campeon}">Equipo</div>
+								<div th:if="${subcampeon != null}" style="font-size:14px;color:#4b5563;margin-top:6px;">
+									Subcampeon: <span th:text="${subcampeon}">Otro equipo</span>
+								</div>
+								<div th:if="${marcador != null}" style="font-size:14px;color:#4b5563;margin-top:4px;">
+									Final: <span th:text="${marcador}">A 1 - 0 B</span>
+									<span th:if="${penales != null}" th:text="'(' + ${penales} + ')'"></span>
+								</div>
+							</div>
+							<p th:if="${campeon == null}">Este torneo termino sin partidos registrados, por lo que no hay campeon.</p>
+							<p style="margin-bottom:0;">Gracias por seguir el torneo.</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="background:#f9fafb;color:#6b7280;padding:16px 24px;font-size:12px;">
+							Recibes este correo porque sigues este torneo con las notificaciones activadas. Puedes
+							desactivarlas en la seccion de seguimientos de tu cuenta.</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

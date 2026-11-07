@@ -34,11 +34,15 @@ public class CorreoService {
 		this.remitente = remitente;
 	}
 
+	/** Correo de bienvenida para un usuario recien registrado. */
 	public void enviarBienvenida(String nombre, String correo) {
 		enviar(correo, "Bienvenido a Futbol Bogota", "bienvenida", Map.of("nombre", nombre));
 	}
 
-	
+	/**
+	 * Envia a un correo la plantilla HTML (carpeta templates, sin extension) con las variables dadas. Nunca lanza
+	 * excepciones: un fallo del correo no debe afectar a la accion que lo origino, que ya quedo guardada.
+	 */
 	public void enviar(String correo, String asunto, String plantilla, Map<String, Object> variables) {
 		JavaMailSender sender = mailSender.getIfAvailable();
 		if (sender == null || remitente == null || remitente.isBlank()) {

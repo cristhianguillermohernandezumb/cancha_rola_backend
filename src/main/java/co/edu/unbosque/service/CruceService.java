@@ -29,6 +29,7 @@ public class CruceService {
 
 	private static final String FASE_GRUPOS = "Grupos";
 
+	/** Ronda -> (fase con la que se guardan sus partidos, cuantos cruces tiene). */
 	private static final Map<String, String> FASE_POR_RONDA = Map.of("32AVOS", "32avos", "OCTAVOS", "octavos");
 	private static final Map<String, Integer> CRUCES_POR_RONDA = Map.of("32AVOS", 16, "OCTAVOS", 8);
 
@@ -50,6 +51,7 @@ public class CruceService {
 		this.equipoService = equipoService;
 	}
 
+	/** Consulta publica. Con ronda solo devuelve esa ronda. */
 	@Transactional(readOnly = true)
 	public List<CruceResponse> listar(Long idTorneo, String ronda) {
 		torneoService.buscarEntidad(idTorneo);
@@ -58,6 +60,7 @@ public class CruceService {
 		return cruces.stream().map(this::aRespuesta).toList();
 	}
 
+	/** Reemplaza todos los cruces de la ronda por los indicados (cada equipo aparece una sola vez). */
 	@Transactional
 	public List<CruceResponse> reemplazar(Long idTorneo, String ronda, List<CruceRequest> pedidos) {
 		String codigo = normalizar(ronda);
@@ -118,7 +121,9 @@ public class CruceService {
 		return codigo;
 	}
 
+	/** No se tocan los cruces si el torneo termino, la fase de grupos sigue abierta o ya hay partidos de esa ronda. */
 	private void validarPuedeCambiar(Torneo torneo, String codigo) {
+		// Torneo de 24 equipos (6 grupos): la eliminatoria empieza en octavos; el de 48 (12 grupos), en 32avos.
 		String primera = Integer.valueOf(24).equals(torneo.getMaxEquipos()) ? "OCTAVOS" : "32AVOS";
 		if (!primera.equals(codigo)) {
 			throw new ReglaNegocioException("En este torneo (" + torneo.getMaxEquipos() + " equipos) la eliminatoria empieza en "

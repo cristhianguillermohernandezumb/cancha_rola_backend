@@ -56,6 +56,7 @@ public class UsuarioController {
 		return usuarioService.desactivar(id);
 	}
 
+	/** Solo ADMIN. Ejemplo: PATCH /usuarios/5/rol?valor=ORGANIZADOR */
 	@PatchMapping("/{id}/rol")
 	public UsuarioResponse cambiarRol(@PathVariable Long id, @RequestParam String valor) {
 		return usuarioService.cambiarRol(id, valor);

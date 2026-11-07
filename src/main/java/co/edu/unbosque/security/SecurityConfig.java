@@ -25,6 +25,7 @@ import co.edu.unbosque.repository.UsuarioRepository;
 @EnableWebSecurity
 public class SecurityConfig {
 
+	/** Origenes del frontend permitidos (CORS). Se cambia con app.cors.origins=http://...,http://... */
 	@Value("${app.cors.origins:http://localhost:4200,http://localhost:3000,http://localhost:5173}")
 	private String origenesPermitidos;
 
@@ -62,6 +63,7 @@ public class SecurityConfig {
 		return http.build();
 	}
 
+	/** Spring Boot crearia un usuario "user" con clave aleatoria; no se usa (el acceso es solo por JWT). */
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return username -> {
@@ -82,6 +84,7 @@ public class SecurityConfig {
 		return fuente;
 	}
 
+	/** Mismo formato JSON que GlobalExceptionHandler, para los errores 401 y 403 que Spring Security resuelve antes. */
 	private void escribir(jakarta.servlet.http.HttpServletResponse response, int estado, String mensaje)
 			throws java.io.IOException {
 		response.setStatus(estado);

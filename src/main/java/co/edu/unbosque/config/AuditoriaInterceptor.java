@@ -26,10 +26,12 @@ public class AuditoriaInterceptor implements HandlerInterceptor {
 
 	private static final Logger log = LoggerFactory.getLogger(AuditoriaInterceptor.class);
 
+	/** Segmentos de la URL que son acciones y no entidades. */
 	private static final Set<String> CAMBIOS_DE_ESTADO = Set.of("estado", "activar", "desactivar");
 	private static final Set<String> ACCIONES = Set.of("estado", "activar", "desactivar", "pagar", "notificacion",
 			"camiseta", "retirar", "documento");
 
+	/** Nombre de la entidad segun el ultimo segmento de la URL. */
 	private static final Map<String, String> ENTIDADES = Map.ofEntries(Map.entry("usuarios", "USUARIO"),
 			Map.entry("torneos", "TORNEO"), Map.entry("equipos", "EQUIPO"), Map.entry("grupos", "GRUPO"),
 			Map.entry("jugadores", "JUGADOR"), Map.entry("inscripciones-jugador", "INSCRIPCION_JUGADOR"),
@@ -72,6 +74,7 @@ public class AuditoriaInterceptor implements HandlerInterceptor {
 				log.warn("Auditoria omitida: no existe el usuario {}", idUsuario);
 			}
 		} catch (Exception e) {
+			// La auditoria nunca debe romper la respuesta de la operacion ya realizada.
 			log.warn("No se pudo registrar la auditoria: {}", e.getMessage());
 		}
 	}
@@ -107,6 +110,7 @@ public class AuditoriaInterceptor implements HandlerInterceptor {
 		return ENTIDADES.getOrDefault(ultimo, ultimo.toUpperCase());
 	}
 
+	/** El torneo se conoce cuando la URL empieza por /torneos/{id}. */
 	private Long torneo(List<String> segmentos) {
 		if (segmentos.size() > 1 && segmentos.get(0).equals("torneos") && esNumero(segmentos.get(1))) {
 			return Long.valueOf(segmentos.get(1));
