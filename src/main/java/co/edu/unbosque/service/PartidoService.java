@@ -17,6 +17,7 @@ import co.edu.unbosque.exception.NoEncontradoException;
 import co.edu.unbosque.exception.ReglaNegocioException;
 import co.edu.unbosque.security.Autorizacion;
 import co.edu.unbosque.mapper.PartidoMapper;
+import co.edu.unbosque.repository.AlineacionRepository;
 import co.edu.unbosque.repository.ParArbRepository;
 import co.edu.unbosque.repository.ParEquRepository;
 import co.edu.unbosque.repository.PartidoRepository;
@@ -32,7 +33,6 @@ public class PartidoService {
 	private static final String FINALIZADO = "FINALIZADO";
 	private static final String APLAZADO = "APLAZADO";
 
-	/** Cambios de estado permitidos: de donde se puede pasar a donde. */
 	private static final Map<String, List<String>> TRANSICIONES = Map.of(
 			PROGRAMADO, List.of(EN_JUEGO, APLAZADO),
 			APLAZADO, List.of(PROGRAMADO),
@@ -42,6 +42,7 @@ public class PartidoService {
 	private final PartidoRepository partidoRepository;
 	private final ParEquRepository parEquRepository;
 	private final ParArbRepository parArbRepository;
+	private final AlineacionRepository alineacionRepository;
 	private final PenalRepository penalRepository;
 	private final TorneoService torneoService;
 	private final CanchaService canchaService;
@@ -49,7 +50,8 @@ public class PartidoService {
 
 	public PartidoService(PartidoRepository partidoRepository, ParEquRepository parEquRepository,
 			ParArbRepository parArbRepository, PenalRepository penalRepository, TorneoService torneoService, CanchaService canchaService,
-			PartidoMapper partidoMapper, Autorizacion autorizacion) {
+			PartidoMapper partidoMapper, Autorizacion autorizacion, AlineacionRepository alineacionRepository) {
+		this.alineacionRepository = alineacionRepository;
 		this.autorizacion = autorizacion;
 		this.partidoRepository = partidoRepository;
 		this.parEquRepository = parEquRepository;
@@ -77,7 +79,6 @@ public class PartidoService {
 		return partidoMapper.toResponse(partidoRepository.save(partido));
 	}
 
-	/** Filtros opcionales (solo con idTorneo): jornada o estado. Sin filtros lista todos. */
 	@Transactional(readOnly = true)
 	public List<PartidoResponse> listar(Long idTorneo, Integer jornada, String estado) {
 		List<Partido> partidos;
@@ -101,7 +102,6 @@ public class PartidoService {
 		return partidoMapper.toResponse(buscarEntidad(idPartido));
 	}
 
-	/** Solo se edita un partido PROGRAMADO o APLAZADO. El torneo no se puede cambiar. */
 	@Transactional
 	public PartidoResponse actualizar(Long idPartido, PartidoRequest request) {
 		Partido partido = buscarEntidad(idPartido);
@@ -145,7 +145,6 @@ public class PartidoService {
 		return partidoMapper.toResponse(partidoRepository.save(partido));
 	}
 
-	/** Se borra solo si no ha empezado; antes se quitan sus equipos y arbitros asignados. */
 	@Transactional
 	public void eliminar(Long idPartido) {
 		Partido partido = buscarEntidad(idPartido);
@@ -157,14 +156,12 @@ public class PartidoService {
 		partidoRepository.delete(partido);
 	}
 
-	/** Lo usan otros servicios (equipos, arbitros, alineaciones, eventos). */
 	@Transactional(readOnly = true)
 	public Partido buscarEntidad(Long idPartido) {
 		return partidoRepository.findById(idPartido)
 				.orElseThrow(() -> new NoEncontradoException("No existe el partido con id " + idPartido));
 	}
 
-	/** Un partido de eliminatoria empatado no puede terminar sin ganador: antes hay que completar la tanda de penales. */
 	private void validarTandaSiEmpate(Partido partido) {
 		if ("Grupos".equalsIgnoreCase(partido.getFase())
 				|| !partido.getGolesLocal().equals(partido.getGolesVisitante())) {
@@ -199,7 +196,6 @@ public class PartidoService {
 		}
 	}
 
-	/** Para empezar: torneo EN_CURSO, los 2 equipos asignados y un arbitro CENTRAL. */
 	private void validarListoParaJugar(Partido partido) {
 		if (!"EN_CURSO".equals(partido.getTorneo().getEstado())) {
 			throw new ReglaNegocioException("El torneo debe estar EN_CURSO para iniciar partidos (estado: "
@@ -210,6 +206,14 @@ public class PartidoService {
 		}
 		if (!parArbRepository.existeRolEnPartido(partido.getIdPartido(), "CENTRAL")) {
 			throw new ReglaNegocioException("El partido necesita un arbitro CENTRAL");
+		}
+		int minimo = AlineacionService.TITULARES.getOrDefault(partido.getTorneo().getModalidad(), 11);
+		for (var equipo : parEquRepository.buscarPorPartido(partido.getIdPartido())) {
+			long titulares = alineacionRepository.contarTitulares(partido.getIdPartido(), equipo.getId().getIdEquipo());
+			if (titulares < minimo) {
+				throw new ReglaNegocioException("La alineacion del equipo " + equipo.getRol() + " esta incompleta: tiene "
+						+ titulares + " titulares y se necesitan " + minimo + " para iniciar el partido");
+			}
 		}
 	}
 
