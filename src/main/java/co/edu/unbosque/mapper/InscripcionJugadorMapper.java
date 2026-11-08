@@ -22,7 +22,8 @@ public class InscripcionJugadorMapper {
                 e.getJugador() == null ? null : nombre(e.getJugador().getPrimerNombre(), e.getJugador().getPrimerApellido()),
                 e.getId().getIdEquipo(),
                 e.getId().getIdTorneo(),
-                e.getNumeroCamiseta());
+                e.getNumeroCamiseta(),
+                e.getJugador() == null ? null : e.getJugador().getPiernaHabil());
     }
 
     private static String nombre(String primerNombre, String primerApellido) {

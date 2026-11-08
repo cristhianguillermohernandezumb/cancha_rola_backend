@@ -5,6 +5,7 @@ public record InscripcionJugadorResponse(
         String nombreJugador,
         Long idEquipo,
         Long idTorneo,
-        Integer numeroCamiseta
+        Integer numeroCamiseta,
+        String piernaHabil
 ) {
 }
