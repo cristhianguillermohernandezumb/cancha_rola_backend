@@ -50,7 +50,8 @@ public class UsuarioService {
 		Usuario usuario = usuarioMapper.toEntity(request);
 		usuario.setContrasenia(passwordEncoder.encode(request.contrasenia()));
 		usuario.setFechaRegistro(LocalDate.now());
-		usuario.setEstado(ACTIVO);
+		// Un organizador queda inactivo hasta que un administrador lo active.
+		usuario.setEstado("ORGANIZADOR".equals(request.rol()) ? INACTIVO : ACTIVO);
 		Usuario guardado = usuarioRepository.save(usuario);
 		// Solo los usuarios normales (ESPECTADOR) reciben correo de bienvenida; se envia despues de guardar.
 		if ("ESPECTADOR".equals(guardado.getRol())) {
