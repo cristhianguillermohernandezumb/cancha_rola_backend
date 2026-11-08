@@ -10,6 +10,6 @@ public record UsuarioRequest(
         @Positive Long telefono,
         @NotBlank @Email @Size(max = 100) String correo,
         @NotBlank @Size(min = 8, max = 72) String contrasenia,
-        @NotBlank @Pattern(regexp = "ORGANIZADOR|ESPECTADOR", message = "valores permitidos: ORGANIZADOR, ESPECTADOR") String rol
+        @NotBlank @Pattern(regexp = "ESPECTADOR", message = "el registro solo permite el rol ESPECTADOR; un administrador puede cambiarlo despues") String rol
 ) {
 }
