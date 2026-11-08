@@ -18,6 +18,7 @@ import co.edu.unbosque.exception.ReglaNegocioException;
 import co.edu.unbosque.security.Autorizacion;
 import co.edu.unbosque.mapper.PartidoMapper;
 import co.edu.unbosque.repository.AlineacionRepository;
+import co.edu.unbosque.repository.EventoPartidoRepository;
 import co.edu.unbosque.repository.ParArbRepository;
 import co.edu.unbosque.repository.ParEquRepository;
 import co.edu.unbosque.repository.PartidoRepository;
@@ -43,6 +44,7 @@ public class PartidoService {
 	private final ParEquRepository parEquRepository;
 	private final ParArbRepository parArbRepository;
 	private final AlineacionRepository alineacionRepository;
+	private final EventoPartidoRepository eventoPartidoRepository;
 	private final PenalRepository penalRepository;
 	private final TorneoService torneoService;
 	private final CanchaService canchaService;
@@ -50,8 +52,10 @@ public class PartidoService {
 
 	public PartidoService(PartidoRepository partidoRepository, ParEquRepository parEquRepository,
 			ParArbRepository parArbRepository, PenalRepository penalRepository, TorneoService torneoService, CanchaService canchaService,
-			PartidoMapper partidoMapper, Autorizacion autorizacion, AlineacionRepository alineacionRepository) {
+			PartidoMapper partidoMapper, Autorizacion autorizacion, AlineacionRepository alineacionRepository,
+			EventoPartidoRepository eventoPartidoRepository) {
 		this.alineacionRepository = alineacionRepository;
+		this.eventoPartidoRepository = eventoPartidoRepository;
 		this.autorizacion = autorizacion;
 		this.partidoRepository = partidoRepository;
 		this.parEquRepository = parEquRepository;
@@ -150,6 +154,10 @@ public class PartidoService {
 		Partido partido = buscarEntidad(idPartido);
 		autorizacion.exigirDuenoDeTorneo(partido.getTorneo());
 		validarEditable(partido);
+		// Orden por llaves foraneas: eventos -> alineacion -> equipos/arbitros/penales -> partido.
+		eventoPartidoRepository.deleteAll(eventoPartidoRepository.findByIdPartidoOrderByMinutoAsc(idPartido));
+		alineacionRepository.deleteAll(alineacionRepository.buscarPorPartido(idPartido));
+		alineacionRepository.flush();
 		parEquRepository.deleteAll(parEquRepository.buscarPorPartido(idPartido));
 		parArbRepository.deleteAll(parArbRepository.buscarPorPartido(idPartido));
 		penalRepository.deleteAll(penalRepository.findByIdPartidoOrderByOrdenAsc(idPartido));
