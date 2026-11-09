@@ -84,6 +84,20 @@ CREATE TABLE correo_jugador (
     CONSTRAINT correo_jugador_pk PRIMARY KEY (correo_jugador, jugador_id_jugador)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE cruce (
+    id_cruce BIGINT NOT NULL AUTO_INCREMENT COMMENT 'identificador unico de un cruce',
+    ronda VARCHAR(20) NOT NULL COMMENT 'ronda eliminatoria del cruce (32avos, octavos)',
+    orden INT NOT NULL COMMENT 'posicion del cruce dentro de la ronda',
+    torneo_id_torneo BIGINT NOT NULL,
+    local_id_equipo BIGINT NOT NULL,
+    visitante_id_equipo BIGINT NOT NULL,
+    CONSTRAINT cruce_ck_1 CHECK (ronda IN ('32AVOS','OCTAVOS')),
+    CONSTRAINT cruce_ck_2 CHECK (orden > 0),
+    CONSTRAINT cruce_ck_3 CHECK (local_id_equipo <> visitante_id_equipo),
+    CONSTRAINT cruce_pk PRIMARY KEY (id_cruce),
+    CONSTRAINT cruce__un UNIQUE (torneo_id_torneo, ronda, orden)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE entrenador (
     id_entrenador BIGINT NOT NULL AUTO_INCREMENT COMMENT 'Identificador unico de un entrenador',
     documento VARCHAR(50) NOT NULL COMMENT 'documento de identidad de un entrenador',
@@ -223,6 +237,18 @@ CREATE TABLE partido (
     CONSTRAINT partido_pk PRIMARY KEY (id_partido)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE penal (
+    id_penal BIGINT NOT NULL AUTO_INCREMENT COMMENT 'identificador unico de un tiro de penal',
+    orden INT NOT NULL COMMENT 'orden del tiro en la tanda de penales (1 es el primer tiro)',
+    convertido CHAR(1) NOT NULL COMMENT 'si el tiro fue gol (S) o fallo (N)',
+    partido_id_partido BIGINT NOT NULL,
+    equipo_id_equipo BIGINT NOT NULL,
+    CONSTRAINT penal_ck_1 CHECK (convertido IN ('S','N')),
+    CONSTRAINT penal_ck_2 CHECK (orden > 0),
+    CONSTRAINT penal_pk PRIMARY KEY (id_penal),
+    CONSTRAINT penal__un UNIQUE (partido_id_partido, orden)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE telefono_arbitro (
     telefono_arbitro VARCHAR(20) NOT NULL COMMENT 'numero telefonico de un arbitro',
     arbitro_id_arbitro BIGINT NOT NULL,
@@ -309,6 +335,15 @@ ALTER TABLE correo_arbitro
 ALTER TABLE correo_jugador
     ADD CONSTRAINT correo_jugador_jugador_fk FOREIGN KEY (jugador_id_jugador) REFERENCES jugador (id_jugador);
 
+ALTER TABLE cruce
+    ADD CONSTRAINT cruce_equipo_local_fk FOREIGN KEY (local_id_equipo) REFERENCES equipo (id_equipo);
+
+ALTER TABLE cruce
+    ADD CONSTRAINT cruce_equipo_visitante_fk FOREIGN KEY (visitante_id_equipo) REFERENCES equipo (id_equipo);
+
+ALTER TABLE cruce
+    ADD CONSTRAINT cruce_torneo_fk FOREIGN KEY (torneo_id_torneo) REFERENCES torneo (id_torneo);
+
 ALTER TABLE entrenador
     ADD CONSTRAINT entrenador_equipo_fk FOREIGN KEY (equipo_id_equipo) REFERENCES equipo (id_equipo);
 
@@ -356,6 +391,12 @@ ALTER TABLE partido
 
 ALTER TABLE partido
     ADD CONSTRAINT partido_torneo_fk FOREIGN KEY (torneo_id_torneo) REFERENCES torneo (id_torneo);
+
+ALTER TABLE penal
+    ADD CONSTRAINT penal_equipo_fk FOREIGN KEY (equipo_id_equipo) REFERENCES equipo (id_equipo);
+
+ALTER TABLE penal
+    ADD CONSTRAINT penal_partido_fk FOREIGN KEY (partido_id_partido) REFERENCES partido (id_partido);
 
 ALTER TABLE telefono_entrenador
     ADD CONSTRAINT tel_entrenador_fk FOREIGN KEY (entrenador_id_entrenador) REFERENCES entrenador (id_entrenador);
