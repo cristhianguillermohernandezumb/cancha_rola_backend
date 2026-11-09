@@ -45,7 +45,6 @@ public class InscripcionJugadorController {
 		return inscripcionService.listarPorJugador(idJugador);
 	}
 
-	/** Ejemplo: /torneos/1/equipos/1/jugadores/1/camiseta?numero=10 */
 	@PatchMapping("/torneos/{idTorneo}/equipos/{idEquipo}/jugadores/{idJugador}/camiseta")
 	public InscripcionJugadorResponse cambiarCamiseta(@PathVariable Long idTorneo, @PathVariable Long idEquipo,
 			@PathVariable Long idJugador, @RequestParam Integer numero) {

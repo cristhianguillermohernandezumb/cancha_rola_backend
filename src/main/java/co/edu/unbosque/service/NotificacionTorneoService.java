@@ -80,7 +80,6 @@ public class NotificacionTorneoService {
 		}
 	}
 
-	/** Seguidores ACTIVOS que dejaron las notificaciones activadas. */
 	private List<Usuario> destinatarios(Long idTorneo) {
 		return torUsuRepository.buscarPorTorneo(idTorneo).stream().filter(t -> "S".equals(t.getNotificacion()))
 				.map(TorUsu::getUsuario).filter(u -> u != null && "ACTIVO".equals(u.getEstado())).toList();
@@ -97,10 +96,6 @@ public class NotificacionTorneoService {
 		return vars;
 	}
 
-	/**
-	 * Campeon = ganador del partido de la final (por goles o, si empataron, por penales). Si el torneo no tuvo
-	 * final se usa el lider de la tabla; si tampoco hubo partidos, el correo sale sin campeon.
-	 */
 	private Map<String, Object> resultadoFinal(Torneo torneo) {
 		Map<String, Object> vars = new HashMap<>();
 		vars.put("campeon", null);

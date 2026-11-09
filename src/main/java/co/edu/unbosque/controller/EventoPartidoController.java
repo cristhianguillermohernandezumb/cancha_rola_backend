@@ -31,7 +31,6 @@ public class EventoPartidoController {
 		return eventoService.registrar(request);
 	}
 
-	/** Eventos del partido ordenados por minuto. */
 	@GetMapping("/partidos/{idPartido}/eventos")
 	public List<EventoPartidoResponse> listar(@PathVariable Long idPartido) {
 		return eventoService.listarPorPartido(idPartido);

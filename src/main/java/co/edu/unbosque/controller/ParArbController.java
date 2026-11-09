@@ -25,7 +25,6 @@ public class ParArbController {
 		this.parArbService = parArbService;
 	}
 
-	/** Ejemplo: POST /partidos/1/arbitros/2?rol=CENTRAL */
 	@PostMapping("/{idArbitro}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ParArbResponse asignar(@PathVariable Long idPartido, @PathVariable Long idArbitro,

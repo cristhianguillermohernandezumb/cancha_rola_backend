@@ -11,7 +11,6 @@ public class UsuarioMapper {
 
     public Usuario toEntity(UsuarioRequest r) {
         Usuario e = new Usuario();
-        // El servicio debe cifrar la contrasenia (BCrypt) y poner fechaRegistro y estado antes de guardar.
         e.setPrimerNombre(r.primerNombre());
         e.setSegundoNombre(r.segundoNombre());
         e.setPrimerApellido(r.primerApellido());
@@ -23,7 +22,6 @@ public class UsuarioMapper {
         return e;
     }
 
-    /** Copia los datos editables del perfil sobre una entidad existente (no toca id, rol, contrasenia, fechaRegistro ni estado). */
     public void actualizarEntidad(Usuario e, UsuarioActualizarRequest r) {
         e.setPrimerNombre(r.primerNombre());
         e.setSegundoNombre(r.segundoNombre());

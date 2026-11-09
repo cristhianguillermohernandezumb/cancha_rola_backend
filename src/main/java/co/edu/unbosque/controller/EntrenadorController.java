@@ -35,7 +35,6 @@ public class EntrenadorController {
 		return entrenadorService.crear(request);
 	}
 
-	/** Lista todos. Filtro opcional: /entrenadores?idEquipo=1 */
 	@GetMapping
 	public List<EntrenadorResponse> listar(@RequestParam(required = false) Long idEquipo) {
 		return entrenadorService.listar(idEquipo);
@@ -46,7 +45,6 @@ public class EntrenadorController {
 		return entrenadorService.obtener(id);
 	}
 
-	/** Ejemplo: /entrenadores/documento/CC/80123456 */
 	@GetMapping("/documento/{tipo}/{numero}")
 	public EntrenadorResponse obtenerPorDocumento(@PathVariable String tipo, @PathVariable String numero) {
 		return entrenadorService.obtenerPorDocumento(tipo, numero);

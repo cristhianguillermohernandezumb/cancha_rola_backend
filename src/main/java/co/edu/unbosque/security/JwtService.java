@@ -70,7 +70,6 @@ public class JwtService {
 		return encoder.encode(JwtEncoderParameters.from(cabecera, claims)).getTokenValue();
 	}
 
-	/** Devuelve el id del usuario si el token es valido y no ha expirado; vacio en cualquier otro caso. */
 	public Optional<Long> validar(String token) {
 		try {
 			Jwt jwt = decoder.decode(token);

@@ -25,7 +25,6 @@ public class ParEquController {
 		this.parEquService = parEquService;
 	}
 
-	/** Ejemplo: POST /partidos/1/equipos/3?rol=LOCAL */
 	@PostMapping("/{idEquipo}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ParEquResponse asignar(@PathVariable Long idPartido, @PathVariable Long idEquipo,

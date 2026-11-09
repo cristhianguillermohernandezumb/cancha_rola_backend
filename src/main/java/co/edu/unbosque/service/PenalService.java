@@ -41,14 +41,12 @@ public class PenalService {
 		this.torneoService = torneoService;
 	}
 
-	/** Consulta publica de la tanda de un partido. */
 	@Transactional(readOnly = true)
 	public PenalesResponse obtener(Long idPartido) {
 		Partido partido = partidoService.buscarEntidad(idPartido);
 		return armar(partido, penalRepository.findByIdPartidoOrderByOrdenAsc(idPartido));
 	}
 
-	/** Consulta publica: las tandas de todos los partidos del torneo que tienen penales. */
 	@Transactional(readOnly = true)
 	public List<PenalesResponse> listarDeTorneo(Long idTorneo) {
 		torneoService.buscarEntidad(idTorneo);
@@ -69,7 +67,6 @@ public class PenalService {
 		return respuesta;
 	}
 
-	/** Registra el siguiente tiro (gol o fallo); el equipo que patea lo decide la tanda, alternando desde el local. */
 	@Transactional
 	public PenalesResponse registrar(Long idPartido, boolean convertido) {
 		Partido partido = partidoService.buscarEntidad(idPartido);
@@ -90,7 +87,6 @@ public class PenalService {
 		return armar(partido, tiros);
 	}
 
-	/** Borra el ultimo tiro registrado (para corregir un error). */
 	@Transactional
 	public PenalesResponse deshacerUltimo(Long idPartido) {
 		Partido partido = partidoService.buscarEntidad(idPartido);
@@ -104,7 +100,6 @@ public class PenalService {
 		return armar(partido, tiros);
 	}
 
-	/** Solo en partidos de eliminatoria EN_JUEGO que van empatados. */
 	private void validarTandaPosible(Partido partido) {
 		if (!"EN_JUEGO".equals(partido.getEstado())) {
 			throw new ReglaNegocioException(

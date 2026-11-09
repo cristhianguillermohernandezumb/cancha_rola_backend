@@ -64,7 +64,6 @@ public class EquTorService {
 		inscripcion.setEstadoInscripcion(SIN_PAGAR);
 		inscripcion.setFechaInscripcion(LocalDate.now());
 		EquTor guardada = equTorRepository.save(inscripcion);
-		// Las relaciones son de solo lectura: se asignan para que la respuesta lleve los nombres.
 		guardada.setEquipo(equipo);
 		guardada.setTorneo(torneo);
 		return equTorMapper.toResponse(guardada);
@@ -96,7 +95,6 @@ public class EquTorService {
 		return equTorMapper.toResponse(equTorRepository.save(inscripcion));
 	}
 
-	/** Retira un equipo del torneo. Solo en etapa de inscripcion y si no tiene jugadores inscritos. */
 	@Transactional
 	public void retirar(Long idTorneo, Long idEquipo) {
 		EquTor inscripcion = buscarEntidad(idTorneo, idEquipo);

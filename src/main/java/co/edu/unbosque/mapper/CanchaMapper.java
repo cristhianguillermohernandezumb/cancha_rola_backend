@@ -20,7 +20,6 @@ public class CanchaMapper {
         return e;
     }
 
-    /** Copia los datos editables de la solicitud sobre una cancha existente (no toca el id). */
     public void actualizarEntidad(Cancha e, CanchaRequest r) {
         e.setNombre(r.nombre());
         e.setDireccion(r.direccion());

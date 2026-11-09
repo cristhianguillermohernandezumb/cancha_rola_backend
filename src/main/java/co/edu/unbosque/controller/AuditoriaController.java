@@ -21,7 +21,6 @@ public class AuditoriaController {
 		this.auditoriaService = auditoriaService;
 	}
 
-	/** Ejemplos: /auditoria, /auditoria?idUsuario=1, /auditoria?idTorneo=2 */
 	@GetMapping
 	public List<AuditoriaResponse> listar(@RequestParam(required = false) Long idUsuario,
 			@RequestParam(required = false) Long idTorneo) {

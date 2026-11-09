@@ -49,7 +49,6 @@ public class ParEquService {
 			throw new ReglaNegocioException("Solo se asignan equipos a partidos PROGRAMADO o APLAZADO");
 		}
 		Long idTorneo = partido.getTorneo().getIdTorneo();
-		// El equipo debe estar inscrito en el MISMO torneo del partido.
 		EquTor inscripcion = equTorRepository.findById(new co.edu.unbosque.entity.EquTorId(idEquipo, idTorneo))
 				.orElseThrow(() -> new ReglaNegocioException(
 						"El equipo " + idEquipo + " no esta inscrito en el torneo " + idTorneo + " de este partido"));
@@ -67,7 +66,6 @@ public class ParEquService {
 		parEqu.setId(id);
 		parEqu.setRol(rolNormal);
 		ParEqu guardado = parEquRepository.save(parEqu);
-		// Las relaciones son de solo lectura: se asignan para que la respuesta lleve el nombre.
 		guardado.setPartido(partido);
 		guardado.setEquTor(inscripcion);
 		return parEquMapper.toResponse(guardado);

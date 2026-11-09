@@ -26,7 +26,6 @@ public class ArbitroMapper {
         return e;
     }
 
-    /** Copia los datos de la solicitud sobre un arbitro existente (no toca el id). Reemplaza correos y telefonos. */
     public void actualizarEntidad(Arbitro e, ArbitroRequest r) {
         e.setDocumento(r.documento());
         e.setTipoDocumento(r.tipoDocumento());

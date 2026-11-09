@@ -12,7 +12,6 @@ public class PartidoMapper {
 
     public Partido toEntity(PartidoRequest r, Cancha cancha, Torneo torneo) {
         Partido e = new Partido();
-        // El estado se deja en lo que diga la solicitud o PROGRAMADO si viene vacio (lo decide el servicio).
         if (r.estado() != null) {
             e.setEstado(r.estado());
         }
@@ -24,7 +23,6 @@ public class PartidoMapper {
         return e;
     }
 
-    /** Copia los datos editables sobre un partido existente. El torneo no se cambia ni se tocan los goles. */
     public void actualizarEntidad(Partido e, PartidoRequest r, Cancha cancha) {
         if (r.estado() != null) {
             e.setEstado(r.estado());

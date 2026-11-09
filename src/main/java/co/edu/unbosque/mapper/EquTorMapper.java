@@ -11,7 +11,6 @@ public class EquTorMapper {
 
     public EquTor toEntity(EquTorRequest r) {
         EquTor e = new EquTor();
-        // El servicio debe poner estadoInscripcion (SIN_PAGAR) y fechaInscripcion antes de guardar.
         e.setId(new EquTorId(r.idEquipo(), r.idTorneo()));
         return e;
     }

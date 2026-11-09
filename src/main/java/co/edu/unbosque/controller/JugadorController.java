@@ -35,7 +35,6 @@ public class JugadorController {
 		return jugadorService.crear(request);
 	}
 
-	/** Lista todos. Filtros opcionales: /jugadores?estado=LESIONADO o /jugadores?posicion=PORTERO */
 	@GetMapping
 	public List<JugadorResponse> listar(@RequestParam(required = false) String estado,
 			@RequestParam(required = false) String posicion) {
@@ -47,7 +46,6 @@ public class JugadorController {
 		return jugadorService.obtener(id);
 	}
 
-	/** Ejemplo: /jugadores/documento/CC/1001001001 */
 	@GetMapping("/documento/{tipo}/{numero}")
 	public JugadorResponse obtenerPorDocumento(@PathVariable String tipo, @PathVariable String numero) {
 		return jugadorService.obtenerPorDocumento(tipo, numero);
@@ -58,7 +56,6 @@ public class JugadorController {
 		return jugadorService.actualizar(id, request);
 	}
 
-	/** Ejemplo: /jugadores/1/estado?valor=LESIONADO */
 	@PatchMapping("/{id}/estado")
 	public JugadorResponse cambiarEstado(@PathVariable Long id, @RequestParam String valor) {
 		return jugadorService.cambiarEstado(id, valor);

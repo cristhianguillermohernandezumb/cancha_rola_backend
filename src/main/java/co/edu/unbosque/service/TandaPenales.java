@@ -48,7 +48,6 @@ public final class TandaPenales {
 
 	private static String ganador(int gl, int gv, int tl, int tv) {
 		if (tl <= TIROS_INICIALES && tv <= TIROS_INICIALES) {
-			// A cada equipo le quedan (5 - tiros) intentos: si el otro no los alcanza ni acertando todos, ya gano.
 			if (gl > gv + (TIROS_INICIALES - tv)) {
 				return "LOCAL";
 			}
@@ -57,7 +56,6 @@ public final class TandaPenales {
 			}
 			return null;
 		}
-		// Muerte subita: solo se decide cuando ambos patearon la misma cantidad de veces.
 		if (tl == tv && gl != gv) {
 			return gl > gv ? "LOCAL" : "VISITANTE";
 		}

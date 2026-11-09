@@ -22,7 +22,6 @@ public class AuthService {
 	private final JwtService jwtService;
 	private final AuditoriaService auditoriaService;
 	private final UsuarioMapper usuarioMapper;
-	/** Hash de relleno para que el tiempo de respuesta no delate si el correo existe. */
 	private final String hashRelleno;
 
 	public AuthService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, JwtService jwtService,

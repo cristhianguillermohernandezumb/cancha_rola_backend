@@ -23,17 +23,12 @@ public class EstadisticaController {
 		this.estadisticaService = estadisticaService;
 	}
 
-	/** Ejemplos: /torneos/1/posiciones  o  /torneos/1/posiciones?idGrupo=2 */
 	@GetMapping("/posiciones")
 	public List<PosicionResponse> posiciones(@PathVariable Long idTorneo,
 			@RequestParam(required = false) Long idGrupo) {
 		return estadisticaService.tablaDePosiciones(idTorneo, idGrupo);
 	}
 
-	/**
-	 * Ejemplos: /torneos/1/goleadores, /torneos/1/goleadores?limite=5 o
-	 * /torneos/1/goleadores?fase=grupos (solo grupos) / ?fase=eliminatoria (despues de grupos).
-	 */
 	@GetMapping("/goleadores")
 	public List<GoleadorResponse> goleadores(@PathVariable Long idTorneo,
 			@RequestParam(defaultValue = "10") int limite, @RequestParam(defaultValue = "todas") String fase) {

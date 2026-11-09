@@ -29,7 +29,6 @@ public class JugadorMapper {
         return e;
     }
 
-    /** Copia los datos de la solicitud sobre un jugador existente (no toca el id). Reemplaza correos y telefonos. */
     public void actualizarEntidad(Jugador e, JugadorRequest r) {
         e.setDocumento(r.documento());
         e.setTipoDocumento(r.tipoDocumento());

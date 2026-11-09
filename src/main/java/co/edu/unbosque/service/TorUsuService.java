@@ -58,7 +58,6 @@ public class TorUsuService {
 		seguimiento.setFechaSeguimiento(LocalDate.now());
 		seguimiento.setNotificacion(n);
 		TorUsu guardado = torUsuRepository.save(seguimiento);
-		// Las relaciones son de solo lectura: se asignan para que la respuesta lleve el nombre del torneo.
 		guardado.setTorneo(torneo);
 		guardado.setUsuario(usuario);
 		return torUsuMapper.toResponse(guardado);
@@ -77,7 +76,6 @@ public class TorUsuService {
 		return torUsuRepository.buscarPorTorneo(idTorneo).stream().map(torUsuMapper::toResponse).toList();
 	}
 
-	/** Activa (S) o desactiva (N) las notificaciones de un torneo que el usuario ya sigue. */
 	@Transactional
 	public TorUsuResponse cambiarNotificacion(Long idUsuario, Long idTorneo, String valor) {
 		TorUsu seguimiento = buscarEntidad(idUsuario, idTorneo);

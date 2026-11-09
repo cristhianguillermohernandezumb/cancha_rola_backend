@@ -24,7 +24,6 @@ public class TorUsuController {
 		this.torUsuService = torUsuService;
 	}
 
-	/** Ejemplo: POST /usuarios/5/seguimientos/1?notificacion=S (por defecto S) */
 	@PostMapping("/usuarios/{idUsuario}/seguimientos/{idTorneo}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public TorUsuResponse seguir(@PathVariable Long idUsuario, @PathVariable Long idTorneo,
@@ -32,19 +31,16 @@ public class TorUsuController {
 		return torUsuService.seguir(idUsuario, idTorneo, notificacion);
 	 }
 
-	/** Torneos que sigue un usuario. */
 	@GetMapping("/usuarios/{idUsuario}/seguimientos")
 	public List<TorUsuResponse> listarPorUsuario(@PathVariable Long idUsuario) {
 		return torUsuService.listarPorUsuario(idUsuario);
 	}
 
-	/** Usuarios que siguen un torneo. */
 	@GetMapping("/torneos/{idTorneo}/seguidores")
 	public List<TorUsuResponse> listarPorTorneo(@PathVariable Long idTorneo) {
 		return torUsuService.listarPorTorneo(idTorneo);
 	}
 
-	/** Ejemplo: PATCH /usuarios/5/seguimientos/1/notificacion?valor=N */
 	@PatchMapping("/usuarios/{idUsuario}/seguimientos/{idTorneo}/notificacion")
 	public TorUsuResponse cambiarNotificacion(@PathVariable Long idUsuario, @PathVariable Long idTorneo,
 			@RequestParam String valor) {

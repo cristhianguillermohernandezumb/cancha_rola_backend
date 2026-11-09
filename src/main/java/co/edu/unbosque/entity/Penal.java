@@ -21,7 +21,6 @@ public class Penal {
     @Column(name = "equipo_id_equipo", nullable = false)
     private Long idEquipo;
 
-    /** 'S' si fue gol, 'N' si fallo. */
     @Column(name = "convertido", nullable = false, length = 1)
     private String convertido;
 

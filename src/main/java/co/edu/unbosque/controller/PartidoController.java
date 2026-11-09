@@ -36,7 +36,6 @@ public class PartidoController {
 		return partidoService.crear(request);
 	}
 
-	/** Ejemplos: /partidos, /partidos?idTorneo=1, /partidos?idTorneo=1&jornada=2, /partidos?idTorneo=1&estado=PROGRAMADO */
 	@GetMapping
 	public List<PartidoResponse> listar(@RequestParam(required = false) Long idTorneo,
 			@RequestParam(required = false) Integer jornada, @RequestParam(required = false) String estado) {
@@ -53,7 +52,6 @@ public class PartidoController {
 		return partidoService.actualizar(id, request);
 	}
 
-	/** Ejemplo: /partidos/1/estado?valor=EN_JUEGO */
 	@PatchMapping("/{id}/estado")
 	public PartidoResponse cambiarEstado(@PathVariable Long id, @RequestParam String valor) {
 		return partidoService.cambiarEstado(id, valor);

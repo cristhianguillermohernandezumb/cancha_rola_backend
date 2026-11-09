@@ -28,7 +28,6 @@ public class EntrenadorMapper {
         return e;
     }
 
-    /** Copia los datos de la solicitud sobre un entrenador existente (no toca el id). Reemplaza correos y telefonos. */
     public void actualizarEntidad(Entrenador e, EntrenadorRequest r, Equipo equipo) {
         e.setDocumento(r.documento());
         e.setTipoDocumento(r.tipoDocumento());
@@ -46,7 +45,6 @@ public class EntrenadorMapper {
         e.getTelefonos().addAll(r.telefonos());
     }
 
-    /** Solo los datos que pueden verse sin iniciar sesion. */
     public EntrenadorPublicoResponse toPublico(Entrenador e) {
         return new EntrenadorPublicoResponse(
                 e.getIdEntrenador(),

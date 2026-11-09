@@ -35,7 +35,6 @@ public class TorneoController {
 		return torneoService.crear(request);
 	}
 
-	/** Lista todos los torneos. Opcional: /torneos?estado=INSCRIPCION */
 	@GetMapping
 	public List<TorneoResponse> listar(@RequestParam(required = false) String estado) {
 		return torneoService.listar(estado);
@@ -56,7 +55,6 @@ public class TorneoController {
 		return torneoService.actualizar(id, request);
 	}
 
-	/** Avanza el torneo de etapa: /torneos/1/estado?valor=EN_CURSO */
 	@PatchMapping("/{id}/estado")
 	public TorneoResponse cambiarEstado(@PathVariable Long id, @RequestParam String valor) {
 		return torneoService.cambiarEstado(id, valor);

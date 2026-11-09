@@ -11,7 +11,6 @@ public class TorUsuMapper {
 
     public TorUsu toEntity(TorUsuRequest r) {
         TorUsu e = new TorUsu();
-        // El servicio debe poner fechaSeguimiento antes de guardar.
         e.setId(new TorUsuId(r.idTorneo(), r.idUsuario()));
         e.setNotificacion(r.notificacion());
         return e;

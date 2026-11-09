@@ -17,7 +17,6 @@ public class GrupoMapper {
         return e;
     }
 
-    /** Copia los datos editables de la solicitud sobre un grupo existente (no toca id ni torneo). */
     public void actualizarEntidad(Grupo e, GrupoRequest r) {
         e.setFase(r.fase());
         e.setLetra(r.letra());

@@ -154,7 +154,6 @@ public class PartidoService {
 		Partido partido = buscarEntidad(idPartido);
 		autorizacion.exigirDuenoDeTorneo(partido.getTorneo());
 		validarEditable(partido);
-		// Orden por llaves foraneas: eventos -> alineacion -> equipos/arbitros/penales -> partido.
 		eventoPartidoRepository.deleteAll(eventoPartidoRepository.findByIdPartidoOrderByMinutoAsc(idPartido));
 		alineacionRepository.deleteAll(alineacionRepository.buscarPorPartido(idPartido));
 		alineacionRepository.flush();

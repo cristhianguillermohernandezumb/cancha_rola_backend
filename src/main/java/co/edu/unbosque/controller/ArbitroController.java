@@ -35,7 +35,6 @@ public class ArbitroController {
 		return arbitroService.crear(request);
 	}
 
-	/** Lista todos. Filtro opcional: /arbitros?estado=ACTIVO */
 	@GetMapping
 	public List<ArbitroResponse> listar(@RequestParam(required = false) String estado) {
 		return arbitroService.listar(estado);
@@ -46,7 +45,6 @@ public class ArbitroController {
 		return arbitroService.obtener(id);
 	}
 
-	/** Ejemplo: /arbitros/documento/CC/79123456 */
 	@GetMapping("/documento/{tipo}/{numero}")
 	public ArbitroResponse obtenerPorDocumento(@PathVariable String tipo, @PathVariable String numero) {
 		return arbitroService.obtenerPorDocumento(tipo, numero);
@@ -57,7 +55,6 @@ public class ArbitroController {
 		return arbitroService.actualizar(id, request);
 	}
 
-	/** Ejemplo: /arbitros/1/estado?valor=INACTIVO */
 	@PatchMapping("/{id}/estado")
 	public ArbitroResponse cambiarEstado(@PathVariable Long id, @RequestParam String valor) {
 		return arbitroService.cambiarEstado(id, valor);

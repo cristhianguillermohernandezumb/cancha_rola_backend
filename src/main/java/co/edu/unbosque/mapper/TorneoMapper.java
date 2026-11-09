@@ -11,7 +11,6 @@ public class TorneoMapper {
 
     public Torneo toEntity(TorneoRequest r, Usuario organizador) {
         Torneo e = new Torneo();
-        // El servicio debe poner el estado inicial (INSCRIPCION) antes de guardar.
         e.setNombre(r.nombre());
         e.setFechaInicio(r.fechaInicio());
         e.setFechaFin(r.fechaFin());
@@ -24,7 +23,6 @@ public class TorneoMapper {
         return e;
     }
 
-    /** Copia los datos editables de la solicitud sobre un torneo existente (no toca id, estado ni organizador). */
     public void actualizarEntidad(Torneo e, TorneoRequest r) {
         e.setNombre(r.nombre());
         e.setFechaInicio(r.fechaInicio());

@@ -13,22 +13,17 @@ public interface EventoPartidoRepository extends JpaRepository<EventoPartido, Lo
 
 	List<EventoPartido> findByIdPartidoAndIdJugador(Long idPartido, Long idJugador);
 
-	/** Para calcular el marcador: cuenta eventos de un tipo (por ejemplo GOL) de un equipo en un partido. */
 	@Query("select count(e) from EventoPartido e where e.idPartido = :idPartido and e.idEquipo = :idEquipo and e.tipoEvento = :tipo")
 	long contarPorPartidoEquipoYTipo(@Param("idPartido") Long idPartido, @Param("idEquipo") Long idEquipo, @Param("tipo") String tipo);
 
-
-	/** Goles (sin autogoles) por jugador y equipo en un torneo. Cada fila: [idJugador, idEquipo, cantidad]. */
 	@Query("select e.idJugador, e.idEquipo, count(e) from EventoPartido e where e.idTorneo = :idTorneo and e.tipoEvento = 'GOL' group by e.idJugador, e.idEquipo")
 	List<Object[]> contarGolesPorJugador(@Param("idTorneo") Long idTorneo);
 
-	/** Igual que contarGolesPorJugador, pero solo con los goles de partidos de la fase de grupos. */
 	@Query("select e.idJugador, e.idEquipo, count(e) from EventoPartido e where e.idTorneo = :idTorneo and e.tipoEvento = 'GOL' "
 			+ "and exists (select 1 from Partido p where p.idPartido = e.idPartido and lower(p.fase) = 'grupos') "
 			+ "group by e.idJugador, e.idEquipo")
 	List<Object[]> contarGolesPorJugadorEnGrupos(@Param("idTorneo") Long idTorneo);
 
-	/** Solo con los goles de partidos posteriores a la fase de grupos (32avos, octavos, cuartos, semifinales, final). */
 	@Query("select e.idJugador, e.idEquipo, count(e) from EventoPartido e where e.idTorneo = :idTorneo and e.tipoEvento = 'GOL' "
 			+ "and exists (select 1 from Partido p where p.idPartido = e.idPartido and lower(p.fase) <> 'grupos') "
 			+ "group by e.idJugador, e.idEquipo")

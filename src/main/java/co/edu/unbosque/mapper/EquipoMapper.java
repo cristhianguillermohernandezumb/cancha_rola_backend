@@ -18,13 +18,11 @@ public class EquipoMapper {
         return e;
     }
 
-    /** Copia los datos editables de la solicitud sobre un equipo existente (no toca el id). */
     public void actualizarEntidad(Equipo e, EquipoRequest r) {
         e.setNombre(r.nombre());
         e.setFechaFundacion(r.fechaFundacion());
         e.setCorreo(r.correo());
         e.setTelefonoEquipo(r.telefonoEquipo());
-        // Un escudo de 1 byte es el relleno de "no cambiar": se conserva el escudo que ya tiene el equipo.
         if (r.escudo() != null && r.escudo().length > 1) {
             e.setEscudo(r.escudo());
         }

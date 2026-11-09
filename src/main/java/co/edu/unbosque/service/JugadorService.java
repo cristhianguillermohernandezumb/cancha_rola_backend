@@ -33,7 +33,6 @@ public class JugadorService {
 		return jugadorMapper.toResponse(jugadorRepository.save(jugador));
 	}
 
-	/** Filtros opcionales: primero se aplica estado y, si no viene, posicion. Sin filtros lista todos. */
 	@Transactional(readOnly = true)
 	public List<JugadorResponse> listar(String estado, String posicion) {
 		List<Jugador> jugadores;
@@ -72,7 +71,6 @@ public class JugadorService {
 		return jugadorMapper.toResponse(jugadorRepository.save(jugador));
 	}
 
-	/** Para registrar una lesion o suspension sin reenviar todos los datos del jugador. */
 	@Transactional
 	public JugadorResponse cambiarEstado(Long idJugador, String nuevoEstado) {
 		String estado = nuevoEstado == null ? "" : nuevoEstado.toUpperCase();
@@ -84,14 +82,12 @@ public class JugadorService {
 		return jugadorMapper.toResponse(jugadorRepository.save(jugador));
 	}
 
-	/** Lo usan otros servicios (inscripciones, alineaciones...) para obtener la entidad completa. */
 	@Transactional(readOnly = true)
 	public Jugador buscarEntidad(Long idJugador) {
 		return jugadorRepository.findById(idJugador)
 				.orElseThrow(() -> new NoEncontradoException("No existe el jugador con id " + idJugador));
 	}
 
-	/** Regla UNIQUE de la base: (tipo de documento, documento). */
 	private void validarDocumentoLibre(String tipoDocumento, String documento) {
 		if (jugadorRepository.existsByTipoDocumentoAndDocumento(tipoDocumento, documento)) {
 			throw new ReglaNegocioException("Ya existe un jugador con documento " + tipoDocumento + " " + documento);
